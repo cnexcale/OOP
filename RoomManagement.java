@@ -2,7 +2,7 @@ class Room {
 	
 	String name;
 	int seats, compSeats;
-	boolean occupied = false;;
+	boolean occupied = false;
 	
 	Room (String newName, int newSeats, int newCompSeats, boolean occupation){
 		name = newName;
