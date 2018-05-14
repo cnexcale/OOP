@@ -60,7 +60,8 @@ public class RoomManagement{
 				Out.println("> Mit "+suitableRoom.seats+" Plätzen insgesamt und "+suitableRoom.compSeats+
 				" PC-Arbeitsplätzen.");
 				if (!suitableRoom.name.equals(alternativeRoom.name)){
-					Out.println("* Der Raum "+alternativeRoom.name+" wäre auch geeignet, ist jedoch leider bereits belegt.\n 						* Setzen Sie sich bitte mit der verantwortlichen Person in Kontakt.");
+					Out.println("* Der Raum "+alternativeRoom.name+" wäre auch geeignet, ist jedoch leider bereits belegt."
+					+" Setzen Sie sich bitte mit der verantwortlichen Person in Kontakt.");
 				}
 			} else {
 				Out.println("Es wurde leider kein passender Raum gefunden.");
@@ -146,12 +147,33 @@ public class RoomManagement{
 	private static int getSeatsFromUser(){
 		Out.println();
 		Out.print("Bitte Sizplatzbedarf insgesamt eingeben (nur ganze Zahlen):");
-		return In.readInt();
+		int seats = checkIntInput("Sitzplätze");
+		return seats;
 	}
 	private static int getCompSeatsFromUser(){
 		Out.print("Bitte PC-Bedarf eingeben (nur ganze Zahlen):");
-		return In.readInt();
+		int pcSeats = checkIntInput("PC-Arbeitsplätze");
+		return pcSeats;
 	}
+	
+	private static int checkIntInput(String what){
+		boolean check=false;
+		String input;
+		do{
+		input = In.readLine();
+		for (int i = 0; i < input.length(); i++){
+			if (!Character.isDigit(input.charAt(i))){
+				Out.println("Ungültige Eingabe, bitte nur ganze Zahlen.");
+				Out.print("Neue Eingabe der benötigten " + what+ ": ");
+				break;
+			}
+			else if (i==input.length()-1) check = true;
+		}
+		}while (!check);
+		return Integer.parseInt(input);
+	}
+	
+	
 }
 
 /*
