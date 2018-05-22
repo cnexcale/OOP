@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+
 public class postfixCalc {
 
 	public static void main (String[] args){
@@ -15,7 +16,7 @@ public class postfixCalc {
 			}
 			else {
 				String result = getResult(newInput);
-				if (result.equals("error")) Out.println("Ungültigerausdruck!");
+				if (result.equals("error")) Out.println("Ungültiger Ausdruck!");
 			}
 		}
 	}
@@ -29,11 +30,12 @@ public class postfixCalc {
 			for (int i = 0; i < split.length; i++){
 				if (split[i].equals("=")){
 					int temp = stack.pop();
-					Out.println(temp);
+					Out.print(temp+" ");
 				} 
 				else {
-					if (split[i].matches("[0-9]+")){
-						stack.push(Integer.parseInt(split[i]));
+					if (split[i].matches("[0-9]+|[-0-9]+")){
+						//stack.push(Integer.parseInt(split[i])); //Diese variante kann negative Zahlen nutzen
+						stack.push(Math.abs(Integer.parseInt(split[i])));
 					}
 					else{
 						if (split[i].charAt(0) == ':') {
@@ -47,7 +49,8 @@ public class postfixCalc {
 						}
 					}
 				}
-			}	
+			}
+	Out.println();	
 	return "fine";
 	}
 	
@@ -62,52 +65,15 @@ public class postfixCalc {
 		return result;
 	}
 	
-	/*
-	private static String[] splitInput(String newInput){
-	List<String> split = new ArrayList<String>();
-	String workingInput = newInput.trim();
-	int lastIndex = 0;
-	for (int i = 0; i < workingInput.length(); i++){
-		if (i < workingInput.length()-1){
-			if (workingInput.charAt(i)==' '){ 
-					String temp = workingInput.substring(lastIndex, i ).replace(" ", "");
-				if (temp.length()>0){
-					if(checkInputEntry(temp)){
-						split.add(temp);
-						lastIndex = i;
-					} else {
-						split.add(null); 
-						lastIndex = i;}
-				}
-				else continue;
-			}
-		} else {
-			split.add(workingInput.substring(lastIndex, i+1).trim());
-		}
-	}
-	return split.toArray(new String[split.size()]);
-	}
-
-	private static boolean checkInputEntry (String input){
-		if (input.matches("[0-9]+")) return true;
-		for (int i = 0; i < input.length(); i++){
-			if (input.charAt(i)=='+'||input.charAt(i)=='-'||
-					input.charAt(i)=='*'||input.charAt(i)=='/'||
-						input.charAt(i)==':'||input.charAt(i)=='=') return true;
-		}
-		return false;
-	}
-
-	*/
-	
 	private static String[] splitInput (String newInput){
 		List<String> split = new ArrayList<String>();
 		String workingInput = newInput.trim();
 		int i = 0;
 		while(i < workingInput.length()){
-			if (Character.isDigit(workingInput.charAt(i))){
+			if (Character.isDigit(workingInput.charAt(i))|| //splittet auch negative Zahlen, wenn diese ohne space eingegeben werden
+			((workingInput.charAt(i)=='-') && Character.isDigit(workingInput.charAt(i+1)))){
 				int k = i;
-				while (Character.isDigit(workingInput.charAt(k))) k++;			
+				while (Character.isDigit(workingInput.charAt(k))||workingInput.charAt(k)=='-') k++;			
 				split.add(workingInput.substring(i,k));
 				i = k;
 			} else if (workingInput.charAt(i)=='+'||workingInput.charAt(i)=='-'||
@@ -121,9 +87,6 @@ public class postfixCalc {
 		}
 		return split.toArray(new String[split.size()]);
 	}
-	
-	
-
 	
 	private static boolean checkExpression (String[] inputExpression){
 		for (int i = 0; i < inputExpression.length; i++){
